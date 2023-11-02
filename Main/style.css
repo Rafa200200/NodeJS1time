@@ -1,0 +1,103 @@
+body {
+margin: 0;
+}
+
+.topnav {
+overflow: hidden;
+background-color: #ffab7a;
+}
+
+.topnav a {
+float: left;
+color: #f2f2f2;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+font-size: 17px;
+}
+
+.topnav a.active {
+background-color: #f97f38;
+color: white;
+}
+.topnav a.active:hover {
+background-color: #ffab7a;
+color: white;
+}
+.topnav a.signup{
+float: right;
+background-color: #f97f38;
+color: white;
+}
+.topnav a.signup:hover {
+background-color: #ffab7a;
+color: white;
+}
+
+                                                            /*CARROSSEL DE IMAGENS*/
+
+* {box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;}
+.mySlides {display: none;}
+img {vertical-align: middle;
+    height: 740px;}
+
+
+/* Slideshow container */
+.slideshow-container {
+    max-height: 700px;
+    position: relative;
+    margin: auto;
+}
+
+/* Caption text */
+.text {
+    font-family: 'Bookman Old Style';
+    text-shadow: 5px 5px #000000;
+    color: #ffbd96;
+    font-size:100px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+    text-align: center;
+    -webkit-text-stroke: 2px #000000;
+}
+.subtext {
+    font-family: 'Arial';
+
+    color: #f2f2f2;
+    font-size:30px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 45%;
+    width: 100%;
+    text-align: center;
+    -webkit-text-stroke: 0.1px #000000;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active {
+    background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+    animation-name: fade;
+    animation-duration: 2.5s;
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}

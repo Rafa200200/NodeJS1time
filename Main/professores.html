@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style2.css">
+	<script src="data.js"></script>
+</head>
+<body>
+	<div class="topnav">
+		<a class="active" href="index.html">Home</a>
+		<a class="active" href="cursos.html">Cursos</a>
+		<a class="active" href="alunos.html">Alunos</a>
+		<a class="active" href="professores.html">Professores</a>
+	</div>
+	 
+    <div class="container">
+		<div class="table-responsive">
+			<div class="table-wrapper">
+				<div class="table-title">
+					<div class="row">
+						<div class="col-xs-9">
+							<h2>Escola de Música - Professores</h2>
+						</div>
+						<div class="col-xs-3.1">
+							<a href="#editarProfessor" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteProfessor" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#addProfessor" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Adicionar novo Professor</span></a>				
+						</div>
+					</div>
+				</div>
+				<table class="table table-striped table-hover" id="mostrarProfessor">
+					<thead>
+						<tr>
+							<th>Numero</th>
+							<th>Nome</th>
+							<th>Email</th>
+							<th>Curso</th>
+						</tr>		
+				</table>
+			</div>
+		</div>   
+		<script type="text/javascript">
+			$(document).ready(function () {
+  
+			// FETCHING DATA FROM JSON FILE
+			$.getJSON("../array.json", 
+					function (data) {
+				var student = '';
+
+				// ITERATING THROUGH OBJECTS
+				$.each(data, function (key, value) {
+
+					//CONSTRUCTION OF ROWS HAVING
+					// DATA FROM JSON OBJECT
+					student += '<tr>';
+					student += '<td>' + 
+						value.id + '</td>';
+
+					student += '<td>' + 
+						value.nome + '</td>';
+
+					student += '<td>' + 
+						value.email + '</td>';
+
+					student += '<td>' + 
+						value.curso + '</td>';
+
+					student += '</tr>';
+				});
+					
+				//INSERTING ROWS INTO TABLE 
+				$('#mostrarProfessor').append(student);
+			});
+			});
+		
+			
+			
+		</script>
+    </div>
+	<!-- Edit Modal HTML -->
+	<div id="addProfessor" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">						
+					<h4 class="modal-title">Adicionar Professor</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Nome</label>
+						<input type="text" id="nomeProfessor" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" id="emailProfessor" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Curso que leciona</label>
+						<input type="text" id="cursoProfessor" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" onclick="location.reload();" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input type="submit" class="btn btn-success" value="Adicionar" id="inserirProfessor">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+                            const enviar = document.getElementById('inserirProfessor');
+                          
+                            enviar.addEventListener('click', (event) => {
+                              event.preventDefault(); // Previne o comportamento padrão do botão (enviar o formulário)
+                              
+							  const nome = document.getElementById('nomeProfessor').value; // Lê o valor do input
+                              const email = document.getElementById('emailProfessor').value;
+							  const curso = document.getElementById('cursoProfessor').value;
+                              
+                              const dados = {
+                                nome: nome,
+                                email: email,
+								curso: curso,
+                              }; // Cria um objeto com os dados a serem enviados
+                          
+                              // Envia uma requisição POST
+                              fetch('/adicionarprof', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(dados)
+                              })
+                              .then((response) => response.json())
+                              .then((array) => {
+                                console.log(`utilizador: ${array.nome} (email: ${array.email}, curso: ${array.curso})`);
+                                alert('utilizador adicionado');
+                              })
+                              .catch((error) => {
+                                console.error(error);
+                              });
+                            });
+	</script>
+	<!-- Edit Modal HTML -->
+	<div id="editarProfessor" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">						
+					<h4 class="modal-title">Editar Professor</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">	
+					<div class="form-group">
+						<label>Numero</label>
+						<input type="number"  id="numeroProfessorMudar" class="form-control" required>
+					</div>				
+					<div class="form-group">
+						<label>Nome</label>
+						<input type="text" id="MudaNome" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" id="MudaEmail" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Curso que leciona</label>
+						<input type="text" id="MudaCurso" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input type="submit" id="muda" class="btn btn-info" value="Guardar">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		// Obtém o formulário
+		const formEditarProfessor = document.getElementById('muda');
+                      
+					  // Adiciona um ouvinte de evento para o evento 'submit' do formulário
+					  formEditarProfessor.addEventListener('click', (event) => {
+						event.preventDefault(); // Evita o comportamento padrão de submit do formulário
+					
+						// Obtém os valores dos campos de entrada
+						const idProfessorr = document.getElementById('numeroProfessorMudar').value;
+						const nomeProfessor = document.getElementById('MudaNome').value;
+						const emailProfessor = document.getElementById('MudaEmail').value;
+						const cursoProfessor = document.getElementById('MudaCurso').value;
+					
+						// Envia uma requisição PUT para o servidor com os novos dados do professor
+						fetch(`/adicionarprof/${idProfessorr}`, {
+						  method: 'PUT',
+						  headers: { 'Content-Type': 'application/json' },
+						  body: JSON.stringify({ nome: nomeProfessor,
+												 email: emailProfessor,
+												 curso: cursoProfessor, }),
+						})
+						.then((response) => {
+						  if (response.ok) {
+							console.log('Professor atualizado com sucesso');
+							alert('Professor Editado com sucesso!')
+						  } else {
+							console.error('Erro ao atualizar professor');
+						  }
+						})
+						.catch((error) => {
+						  console.error(error);
+						});
+					  });
+	</script>
+	<!-- Delete Modal HTML -->
+	<div id="deleteProfessor" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="form-group" style="text-align: center;">
+					<label>Numero
+					<input id="idProfessor" ass="form-control" required></label>
+				</div>	
+				<div class="modal-body">					
+					<p>Tem a certeza que pretende apagar este professor?</p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input id="eliminaProfessor" class="btn btn-danger" value="Apagar">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+						const btnRemoverProfessor = document.getElementById('eliminaProfessor');
+                        btnRemoverProfessor.addEventListener('click', () => {
+                          const idProfessor = document.getElementById('idProfessor').value;
+                          fetch(`/adicionarprof/${idProfessor}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: idProfessor }),
+                            })
+                            .then((response) => {
+                              if (response.ok) {
+                                console.log('Professor removido com sucesso');
+                                alert('Professor removido com sucesso!');
+                              } else {
+                                console.error('Erro ao remover professor');
+                              }
+                            })
+                            .catch((error) => {
+                              console.error(error);
+                            });
+                            console.log(`/adicionarprof/${idProfessor}`);
+
+                        });
+	</script>
+	
+</body>
+</html>

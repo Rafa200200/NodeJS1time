@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="index.html">Home</a>
+        <a class="active" href="cursos.html">Cursos</a>
+        <a class="active" href="alunos.html">Alunos</a>
+        <a class="active" href="professores.html">Professores</a>
+    </div>
+     
+    <div class="container">
+		<div class="table-responsive">
+			<div class="table-wrapper">
+				<div class="table-title">
+					<div class="row">
+						<div class="col-xs-9">
+							<h2>Escola de Música - Alunos</h2>
+						</div>
+						<div class="col-xs-3">
+							<a href="#editarAluno" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteAluno" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#addAluno" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Adicionar novo aluno</span></a>				
+						</div>
+					</div>
+				</div>
+				<table class="table table-striped table-hover" id="mostrarAlunos">
+					<thead>
+						<tr>
+							<th>Numero</th>
+							<th>Nome</th>
+							<th>Curso que frequenta</th>
+							<th>Email</th>
+							<th>Idade</th>
+						</tr>
+				</table>
+			</div>
+		</div>   
+		<script type="text/javascript">
+			$(document).ready(function () {
+  
+			// FETCHING DATA FROM JSON FILE
+			$.getJSON("../arrayalunos.json", 
+					function (data) {
+				var student = '';
+
+				// ITERATING THROUGH OBJECTS
+				$.each(data, function (key, value) {
+
+					//CONSTRUCTION OF ROWS HAVING
+					// DATA FROM JSON OBJECT
+					student += '<tr>';
+					student += '<td>' + 
+						value.id + '</td>';
+
+					student += '<td>' + 
+						value.nome + '</td>';
+
+					student += '<td>' + 
+						value.curso + '</td>';
+
+					student += '<td>' + 
+						value.email + '</td>';
+
+					student += '<td>' + 
+						value.idade + '</td>';
+
+					student += '</tr>';
+				});
+					
+				//INSERTING ROWS INTO TABLE 
+				$('#mostrarAlunos').append(student);
+			});
+			});
+		
+			
+			
+		</script>  
+    </div>
+	<!-- Edit Modal HTML -->
+	<div id="addAluno" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">						
+					<h4 class="modal-title">Adicionar Aluno</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Nome</label>
+						<input type="text" id="nomeAluno" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Curso que frequenta</label>
+						<input type="text"id="linguaAluno" class="form-control" required></input>
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" id="emailAluno" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Idade</label>
+						<input type="number" id="idadeAluno" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" onclick="location.reload();" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input type="submit" class="btn btn-success" value="Adicionar" id="inserirAluno">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const enviar = document.getElementById('inserirAluno');
+	  
+		enviar.addEventListener('click', (event) => {
+		  event.preventDefault(); // Previne o comportamento padrão do botão (enviar o formulário)
+		  
+		  const nome = document.getElementById('nomeAluno').value; // Lê o valor do input
+		  const email = document.getElementById('emailAluno').value;
+		  const curso = document.getElementById('linguaAluno').value;
+		  const idade = document.getElementById('idadeAluno').value;
+		  
+		  const dados = {
+			nome: nome,
+			email: email,
+			curso: curso,
+			idade: idade,
+		  }; // Cria um objeto com os dados a serem enviados
+	  
+		  // Envia uma requisição POST
+		  fetch('/adicionaraluno', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(dados)
+		  })
+		  .then((response) => response.json())
+		  .then((arrayaluno) => {
+			console.log(`utilizador: ${arrayaluno.nome} (email: ${arrayaluno.email}, curso: ${arrayaluno.curso}, idade:${arrayaluno.idade})`);
+			alert('utilizador adicionado');
+		  })
+		  .catch((error) => {
+			console.error(error);
+		  });
+		});
+</script>
+	<!-- Edit Modal HTML -->
+	<div id="editarAluno" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">						
+					<h4 class="modal-title">Editar Aluno</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">	
+					<div class="form-group">
+						<label>Numero de Aluno</label>
+						<input type="number"  id="numeroAlunoMudar" class="form-control" required>
+					</div>				
+					<div class="form-group">
+						<label>Nome</label>
+						<input type="text" id="MudaNome" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Curso que frequenta</label>
+						<input type="text" id="MudaLingua" class="form-control" required>
+					</div>	
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" id="MudaEmail" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Idade</label>
+						<input type="number" id="MudaIdade" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input type="submit" id="muda" class="btn btn-info" value="Guardar">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const formEditarAluno = document.getElementById('muda');
+                      
+					  formEditarAluno.addEventListener('click', (event) => {
+						event.preventDefault(); 
+					
+						const idAluno = document.getElementById('numeroAlunoMudar').value;
+						const nomeAluno = document.getElementById('MudaNome').value;
+						const emailAluno = document.getElementById('MudaEmail').value;
+						const cursoAluno = document.getElementById('MudaLingua').value;
+						const idadeAluno = document.getElementById('MudaIdade').value;
+					
+						fetch(`/adicionaraluno/${idAluno}`, {
+						  method: 'PUT',
+						  headers: { 'Content-Type': 'application/json' },
+						  body: JSON.stringify({ nome: nomeAluno,
+												 email: emailAluno,
+												 curso: cursoAluno,
+												 idade: idadeAluno, }),
+						})
+						.then((response) => {
+						  if (response.ok) {
+							console.log('Aluno atualizado com sucesso');
+							alert('Aluno Editado com sucesso!')
+						  } else {
+							console.error('Erro ao atualizar Aluno');
+						  }
+						})
+						.catch((error) => {
+						  console.error(error);
+						});
+					  });
+	</script>
+	<!-- Delete Modal HTML -->
+	<div id="deleteAluno" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="form-group" style="text-align: center;">
+					<label>Numero
+					<input id="numeroAlunoEliminar" class="form-control" required></label>
+				</div>	
+				<div class="modal-body">					
+					<p>Tem a certeza que pretende apagar este aluno?</p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input id="eliminaAluno" class="btn btn-danger" value="Apagar">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const btnRemoverAluno = document.getElementById('eliminaAluno');
+		btnRemoverAluno.addEventListener('click', () => {
+		  const idAluno = document.getElementById('numeroAlunoEliminar').value;
+		  fetch(`/adicionaraluno/${idAluno}`, {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ id: idAluno }),
+			})
+			.then((response) => {
+			  if (response.ok) {
+				console.log('Aluno removido com sucesso');
+				alert('Aluno removido com sucesso!');
+			  } else {
+				console.error('Erro ao remover Aluno');
+			  }
+			})
+			.catch((error) => {
+			  console.error(error);
+			});
+			console.log(`/adicionaraluno/${idAluno}`);
+
+		});
+</script>
+</body>
+</html>
